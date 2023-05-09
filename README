@@ -1,1 +1,4 @@
 \\\ USE "npm run dev" for starting the front end, it will runs on localhost:5173
+    USE "npm run server" for starting back end, it will runs on localhost:5170
+
+   || OR you can use "npm run app" and start front end and back end simultaneously
