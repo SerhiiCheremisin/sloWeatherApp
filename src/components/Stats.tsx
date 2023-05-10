@@ -1,14 +1,14 @@
-import { Modal, Typography } from '@mui/material';
+import { Typography } from '@mui/material';
 import { useEffect, useState } from 'react';
 import { getAverageDegrees, getMostCommonTemperature, getAboveAverageDays, hotAndColdDaysCounter, checkDates} from '../services/functions';
 import { IStatsProps } from '../utils/types';
-import { Box, FormControl, MenuItem, InputLabel, Button, Alert } from '@mui/material';
+import { Box, FormControl, MenuItem, InputLabel, Button, useTheme } from '@mui/material';
 import { ICityListItem } from '../utils/types';
 import Select, { SelectChangeEvent } from '@mui/material/Select';
 import Modals from './Modals';
 import { modalErrors } from '../utils/types';
 
-const Stats = ( {currentForecast, setForecast} : IStatsProps ):JSX.Element => {
+const Stats = ( {currentForecast} : IStatsProps ):JSX.Element => {
  
 const [localRangedDates, setLocalRangedDates] = useState<ICityListItem[]>([]);
 const [isModalOpen, setIsModalOpen] = useState<boolean>(false); 
@@ -16,12 +16,27 @@ const [modalError, setModalError] = useState<modalErrors>("empty");
 const [dateFrom, setDateFrom] = useState<string>("");
 const [dateTo, setdateTo] = useState<string>("");
 
+const theme = useTheme();
+
 useEffect( () => {
     setLocalRangedDates(currentForecast);
     setDateFrom("");
     setdateTo("");
 }, [currentForecast])
 
+const typographyStyles = {
+    fontSize: {
+        xs:15,
+        sm: 20,
+        lg:30
+    }}
+const labelstyles = {
+    fontSize: {
+        xs: "18px",
+        sm: "1rem",
+        
+    }
+}
 const handleChangeFrom = (event: SelectChangeEvent) => {
     setDateFrom(event.target.value);
   };
@@ -47,14 +62,15 @@ const submitDatesRange = () => {
      setLocalRangedDates(rengedForecast);
   };
 return (
-    <Box>
+    <Box sx={{padding: {xs: "0 10px", sm: "0px"}}}>
         { isModalOpen && <Modals error={modalError} closeFunction = {setIsModalOpen}/> }
-        <Typography sx={{fontSize: 30}}>{`You can change dates for statistic`}</Typography>
-        <Box sx={{display: "flex", gap:10, marginTop: 5}}>
+        <Typography sx={{fontSize: {xs: 20, lg: 30}}}>{`You can change dates for statistic`}</Typography>
+        <Box sx={{display: "flex", gap:"10px", marginTop: {xs: 2, xl: 5}, [theme.breakpoints.down(1600)]: {flexDirection: "column"}}}>
           <Box>
-          <FormControl sx={{width: 300}}>
-            <InputLabel id="demo-simple-select-label">Date from</InputLabel>
+          <FormControl sx={{width: 300, [theme.breakpoints.down(1600)]: {width: "100%"}}}>
+            <InputLabel sx={labelstyles} id="demo-simple-select-label">Date from</InputLabel>
             <Select
+            sx={labelstyles}
             value={new Date(dateFrom).toDateString()}
             label="Date from"
             onChange={handleChangeFrom}
@@ -66,9 +82,10 @@ return (
       </FormControl>
           </Box>
           <Box>
-          <FormControl sx={{width: 300}}>
-            <InputLabel id="demo-simple-select-label">Date to</InputLabel>
+          <FormControl sx={{width: 300, [theme.breakpoints.down(1600)]: {width: "100%"}}}>
+            <InputLabel sx={labelstyles} id="demo-simple-select-label">Date to</InputLabel>
             <Select
+            sx={labelstyles}
             value={new Date(dateTo).toDateString()}
             label="Date to"
             onChange={handleChangeTo}
@@ -79,14 +96,17 @@ return (
         </Select>
       </FormControl>
           </Box> 
-          <Button onClick={submitDatesRange} sx={{width: 200}} variant="outlined">Show</Button>
+          <Button onClick={submitDatesRange} sx={{width: 200, [theme.breakpoints.down(1600)]: {width: "100%"}, [theme.breakpoints.down(600)]: {fontSize: "18px"}}} variant="outlined">Show</Button>
         </Box>
-        <Typography sx={{fontSize: 30}}>{`The statistic for period of: ${localRangedDates.length} days `}</Typography>
-        <Typography sx={{fontSize: 30}}>{`The average temperature is: ${getAverageDegrees(localRangedDates)} ℃`}</Typography>
-        <Typography sx={{fontSize: 30}}>{`The most common temperature is: ${getMostCommonTemperature(localRangedDates)} ℃`}</Typography>
-        <Typography sx={{fontSize: 30}}>{`Number of days with temperature above the average: ${getAboveAverageDays(localRangedDates)} days`}</Typography>
-        <Typography sx={{fontSize: 30}}>{`Number of hot days (above 15℃): ${hotAndColdDaysCounter(localRangedDates, "hot")} days`}</Typography>
-        <Typography sx={{fontSize: 30}}>{`Number of cold days (below 5℃): ${hotAndColdDaysCounter(localRangedDates, "cold")} days`}</Typography>
+        <Box sx={{ display:"flex", flexDirection: "column", gap: {xs: "5px", sm: "0px"}}}>
+        <Typography sx={typographyStyles}>{`The statistic for period of: ${localRangedDates.length} days `}</Typography>
+        <Typography sx={typographyStyles}>{`The average temperature is: ${getAverageDegrees(localRangedDates)} ℃`}</Typography>
+        <Typography sx={typographyStyles}>{`The most common temperature is: ${getMostCommonTemperature(localRangedDates)} ℃`}</Typography>
+        <Typography sx={typographyStyles}>{`Number of days with temperature above the average: ${getAboveAverageDays(localRangedDates)} days`}</Typography>
+        <Typography sx={typographyStyles}>{`Number of hot days (above 15℃): ${hotAndColdDaysCounter(localRangedDates, "hot")} days`}</Typography>
+        <Typography sx={typographyStyles}>{`Number of cold days (below 5℃): ${hotAndColdDaysCounter(localRangedDates, "cold")} days`}</Typography>
+        </Box>
+
     </Box>
   )
 }

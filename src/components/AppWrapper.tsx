@@ -3,14 +3,17 @@ import { Box, styled } from '@mui/material';
 import { fontSize } from '@mui/system';
 
 
-const WrapperBox = styled(Box)(()  => ({
+const WrapperBox = styled(Box)(( {theme} )  => ({
+    [theme.breakpoints.down(600)]: {
+      paddingTop: 50,
+    },
     display: 'flex',
     flexDirection: 'column',
     justifyContent: 'flex-start',
     paddingTop: 150,
     alignItems: 'center',
     width: '100%',
-    height: '100vh',
+    minHeight: '100vh',
     backgroundImage: `url(/mainBG.jpg)`,
     backgroundSize: 'cover',
     backgroundPosition: 'center',

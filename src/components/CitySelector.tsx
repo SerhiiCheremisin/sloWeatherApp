@@ -4,7 +4,7 @@ import { ICitySelectorProps } from '../utils/types';
 import useCommonDispatch from '../services/hooks/useCommonDispatch';
 import { setChosenCity, setCityIsChosen } from '../redux/slices/appStoorage';
 // material ui
-import { Box, styled } from '@mui/material'
+import { Box, styled, useTheme } from '@mui/material'
 import FormControl from '@mui/material/FormControl';
 import Select, { SelectChangeEvent } from '@mui/material/Select';
 import InputLabel from '@mui/material/InputLabel';
@@ -12,7 +12,7 @@ import MenuItem from '@mui/material/MenuItem';
 import Button from '@mui/material/Button';
 import useIsCityChoosen from '../services/hooks/useIsCityChoosen';
 
-const BoxSelector = styled(Box)(() => ({
+const BoxSelector = styled(Box)(({theme} ) => ({
   width: "100%",
   display: "flex",
   justifyContent:"center",
@@ -21,7 +21,7 @@ const BoxSelector = styled(Box)(() => ({
 const CitySelector = ( {list}:ICitySelectorProps ):JSX.Element => {
       const dispatch = useCommonDispatch();
       const cityIsChosen = useIsCityChoosen();
-
+      const theme = useTheme(); 
       const [city,setCity] = useState('City');
 
     const handleChange = (event: SelectChangeEvent):void => {
@@ -40,11 +40,14 @@ const CitySelector = ( {list}:ICitySelectorProps ):JSX.Element => {
 
    return (
     <BoxSelector>
-     <FormControl sx={{flexDirection: "row", gap: 5}}>
+     <FormControl sx={{ [theme.breakpoints.down(1000)]: {
+                        flexDirection: 'column',
+                        }, 
+                        flexDirection: "row", gap: 5}}>
      <InputLabel id="demo-simple-select-label">City</InputLabel>
         <Select
          sx={{
-           width: 500,
+           width: {xs:"100%", md: 500},
            }}
           labelId="demo-simple-select-label"
           id="demo-simple-select"
@@ -56,7 +59,7 @@ const CitySelector = ( {list}:ICitySelectorProps ):JSX.Element => {
              return <MenuItem key={idx} value={el}>{el}</MenuItem>
            }) } 
         </Select>
-        <Button onClick={choserButtonHandler} variant={submitButtonStyle}>Watch the broadcast</Button>
+        <Button sx={{fontSize: {xs: "15px" ,sm: "0.875rem"}}} onClick={choserButtonHandler} variant={submitButtonStyle}>Watch the broadcast</Button>
      </FormControl>
     </BoxSelector>
   )

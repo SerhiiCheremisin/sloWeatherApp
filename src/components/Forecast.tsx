@@ -16,7 +16,13 @@ const ForecastWrapper = styled(Box)( () => ({
     marginTop: 50
 }))
 
-const Today = styled(Card)( () => ({
+const Today = styled(Card)( ( {theme} ) => ({
+    [theme.breakpoints.down("sm")]: {
+        height: "150px"
+     },
+    [theme.breakpoints.down("lg")]: {
+       width: "100%"
+    },
     display: "flex",
     flexDirection: "column",
     justifyContent: "center",
@@ -39,6 +45,13 @@ const Forecast = ():JSX.Element => {
     const cityList = useCityList();
     const currentCity = useCurrentCity();
 
+    const typographystyle = {
+        fontSize: {
+            xs: 18,
+            sm: 30
+        }
+    }
+
     useEffect(() => {
        const currentList = cityList.filter( (item : ICityListItem) => item.location.toLocaleLowerCase() === currentCity.toLocaleLowerCase());
        setCurrentForecast(currentList);
@@ -47,11 +60,11 @@ const Forecast = ():JSX.Element => {
 
   return (
     <ForecastWrapper>
-      <Box sx={{display:"flex", gap:5, flexDirection: "row", justifyContent: "space-between"}}>
+      <Box sx={{display:"flex", gap:5, flexDirection: {xs:"column", lg:"row"}, justifyContent: "space-between"}}>
         <Today>
-          <Typography sx={{fontSize: 30}}>{`Forecast for : ${currentDate?.location}`}</Typography>
-          <Typography sx={{fontSize: 30}}>{`Today is : ${new Date(currentDate?.time).toDateString()}`}</Typography>
-          <Typography sx={{fontSize: 30}}>{`Outside is : ${getCelsius(currentDate?.temperature)}℃`}</Typography>
+          <Typography sx={typographystyle}>{`Forecast for : ${currentDate?.location}`}</Typography>
+          <Typography sx={typographystyle}>{`Today is : ${new Date(currentDate?.time).toDateString()}`}</Typography>
+          <Typography sx={typographystyle}>{`Outside is : ${getCelsius(currentDate?.temperature)}℃`}</Typography>
         </Today>
         <Stats setForecast={setCurrentForecast} currentForecast ={currentForecast}/>
       </Box>
