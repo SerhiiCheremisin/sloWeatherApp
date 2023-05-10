@@ -6,7 +6,8 @@ import { fontSize } from '@mui/system';
 const WrapperBox = styled(Box)(()  => ({
     display: 'flex',
     flexDirection: 'column',
-    justifyContent: 'center',
+    justifyContent: 'flex-start',
+    paddingTop: 150,
     alignItems: 'center',
     width: '100%',
     height: '100vh',
